@@ -27,7 +27,15 @@ const createStore = function (reducer, storeEnhancer) {
             throw new Error('Actions must be plain objects');
         }
 
+        console.log(currentState);
+        console.log(listeners);
+
         currentState = reducer(currentState, action);
+
+        console.log(reducer);
+        console.log('看看看');
+        console.log(currentState);
+        console.log(listeners);
         // 執行訂閱的函數
         for (let i = 0; i < listeners.length; i++) {
             listeners[i]();
@@ -37,12 +45,21 @@ const createStore = function (reducer, storeEnhancer) {
     const subscribe = function (listener) {
         listeners.push(listener);
 
+        console.log('=======');
+        console.log(listeners);
+
         // 取消訂閱
         return () => {
             let index = listeners.findIndex(listener);
             listeners.splice(index, 1);
         };
     };
+
+    // 初始化的時候直接先發送一個 dispatch 當預設值
+    dispatch({ type: `@@redux/INIT${0}` });
+
+    console.log('初始添加完');
+    console.log(getState());
 
     return {
         getState,

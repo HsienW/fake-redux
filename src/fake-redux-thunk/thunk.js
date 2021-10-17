@@ -14,6 +14,38 @@ const thunk = function (store, action) {
     next(action);
 };
 
+const fakeThunk = function (store) {
+    console.log('1');
+    console.log(store);
+    return function (actionCreator) {
+
+        console.log('2');
+        console.log(actionCreator);
+
+        return function (action) {
+
+            console.log('3');
+            console.log(action);
+
+            const {dispatch, getState} = store;
+
+            if (typeof dispatch === 'function') {
+                return action(dispatch, getState);
+            }
+
+            return actionCreator(action);
+        };
+    };
+};
+
+const thunkFake = ({dispatch, getState}) => (actionCreator) => (action) => {
+    if (typeof dispatch === 'function') {
+        return action(dispatch, getState);
+    }
+    return actionCreator(action);
+};
+
 export {
-    thunk
+    thunk,
+    fakeThunk
 };

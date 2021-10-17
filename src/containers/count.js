@@ -1,6 +1,6 @@
 import React from 'react';
 import {store} from './countReducer';
-import {thunk} from '../fake-redux-thunk/thunk';
+import {fakeThunk} from '../fake-redux-thunk/thunk';
 
 export class Count extends React.Component {
     constructor() {
@@ -28,13 +28,19 @@ export class Count extends React.Component {
     }
 
     asyncIncrease() {
-        let timeOut = () => {
+        let creator = () => {
             console.log('進來到函數本身');
+            return doAsync;
+        };
+
+        let doAsync = () => {
+            store.dispatch({type: 'start'});
             setTimeout(() => {
                 store.dispatch({type: 'increase'});
             }, 2000);
         };
-        thunk(store, timeOut);
+
+        fakeThunk(store)(creator)(doAsync);
     }
 
     render() {

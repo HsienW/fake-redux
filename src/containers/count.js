@@ -8,6 +8,9 @@ export class Count extends React.Component {
         this.increase = this.increase.bind(this);
         this.decrease = this.decrease.bind(this);
         this.asyncIncrease = this.asyncIncrease.bind(this);
+        this.state = {
+            input: ''
+        };
     }
 
     // 初步假設在 DidMount 就註冊一個用來監聽 state 的函數
@@ -43,6 +46,12 @@ export class Count extends React.Component {
         fakeThunk(store)(creator)(doAsync);
     }
 
+    inputHandle(event) {
+        this.setState({
+            input: event.target.value
+        });
+    }
+
     render() {
         return (
             <div>
@@ -52,6 +61,9 @@ export class Count extends React.Component {
                 <button onClick={this.decrease} style={{margin: '50px'}}>
                     decrease
                 </button>
+                <input type='text' value={this.state.input} onInput={(event) => {
+                    this.inputHandle(event);
+                }}/>
             </div>
         );
     }
